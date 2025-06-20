@@ -1,7 +1,6 @@
 
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshDistortMaterial, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
 const FloatingShape: React.FC<{ position: [number, number, number]; color: string; speed: number }> = ({ 
@@ -20,18 +19,14 @@ const FloatingShape: React.FC<{ position: [number, number, number]; color: strin
   });
 
   return (
-    <Sphere 
-      ref={meshRef} 
-      position={position} 
-      args={[1, 32, 32]}
-    >
-      <MeshDistortMaterial
+    <mesh ref={meshRef} position={position}>
+      <sphereGeometry args={[1, 32, 32]} />
+      <meshStandardMaterial 
         color={color}
-        distort={0.5}
-        speed={2}
         roughness={0.4}
+        metalness={0.1}
       />
-    </Sphere>
+    </mesh>
   );
 };
 
