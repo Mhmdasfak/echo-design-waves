@@ -1,7 +1,6 @@
-
 import React, { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Float, MeshWobbleGeometry } from '@react-three/drei';
+import { OrbitControls, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 const InteractiveShape: React.FC<{ 
@@ -40,7 +39,7 @@ const InteractiveShape: React.FC<{
       case 'tetrahedron':
         return <tetrahedronGeometry args={[1]} />;
       default:
-        return <MeshWobbleGeometry args={[0.8, 64, 64]} factor={0.1} speed={2} />;
+        return <sphereGeometry args={[0.8, 32, 32]} />;
     }
   };
 
