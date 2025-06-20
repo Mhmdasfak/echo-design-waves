@@ -1,112 +1,74 @@
 
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, Box, Octahedron } from '@react-three/drei';
+import { MeshDistortMaterial, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Floating geometric shape component
-const FloatingShape: React.FC<{ position: [number, number, number]; shape: 'sphere' | 'box' | 'octahedron'; color: string }> = ({ 
+const FloatingShape: React.FC<{ position: [number, number, number]; color: string; speed: number }> = ({ 
   position, 
-  shape, 
-  color 
+  color, 
+  speed 
 }) => {
   const meshRef = useRef<THREE.Mesh>(null);
-
+  
   useFrame((state) => {
-    if (!meshRef.current) return;
-    
-    const time = state.clock.getElapsedTime();
-    meshRef.current.rotation.x = Math.sin(time * 0.5) * 0.2;
-    meshRef.current.rotation.y = Math.cos(time * 0.3) * 0.2;
-    meshRef.current.position.y = position[1] + Math.sin(time * 0.8 + position[0]) * 0.3;
+    if (meshRef.current) {
+      meshRef.current.rotation.x += speed;
+      meshRef.current.rotation.y += speed * 0.5;
+      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * speed) * 0.5;
+    }
   });
 
-  const renderShape = () => {
-    const materialProps = {
-      color,
-      metalness: 0.7,
-      roughness: 0.2,
-      transparent: true,
-      opacity: 0.8,
-    };
-
-    switch (shape) {
-      case 'sphere':
-        return (
-          <Sphere ref={meshRef} position={position} args={[0.8, 32, 32]} castShadow receiveShadow>
-            <meshStandardMaterial {...materialProps} />
-          </Sphere>
-        );
-      case 'box':
-        return (
-          <Box ref={meshRef} position={position} args={[1.2, 1.2, 1.2]} castShadow receiveShadow>
-            <meshStandardMaterial {...materialProps} />
-          </Box>
-        );
-      case 'octahedron':
-        return (
-          <Octahedron ref={meshRef} position={position} args={[1]} castShadow receiveShadow>
-            <meshStandardMaterial {...materialProps} />
-          </Octahedron>
-        );
-      default:
-        return (
-          <Sphere ref={meshRef} position={position} args={[0.8, 32, 32]} castShadow receiveShadow>
-            <meshStandardMaterial {...materialProps} />
-          </Sphere>
-        );
-    }
-  };
-
-  return <>{renderShape()}</>;
+  return (
+    <mesh ref={meshRef} position={position}>
+      <Sphere args={[1, 32, 32]}>
+        <MeshDistortMaterial
+          color={color}
+          attach="material"
+          distort={0.5}
+          speed={2}
+          roughness={0.4}
+        />
+      </Sphere>
+    </mesh>
+  );
 };
 
-// Main 3D scene component
-export const FloatingShapes: React.FC = () => {
+const Scene: React.FC = () => {
   const shapes = useMemo(() => [
-    { position: [-2, 1, 0] as [number, number, number], shape: 'sphere' as const, color: '#3b82f6' },
-    { position: [2, -1, -1] as [number, number, number], shape: 'box' as const, color: '#8b5cf6' },
-    { position: [0, 2, -2] as [number, number, number], shape: 'octahedron' as const, color: '#06b6d4' },
-    { position: [-1.5, -1.5, 1] as [number, number, number], shape: 'sphere' as const, color: '#10b981' },
+    { position: [2, 0, 0] as [number, number, number], color: '#ff6b6b', speed: 0.01 },
+    { position: [-2, 2, -2] as [number, number, number], color: '#4ecdc4', speed: 0.015 },
+    { position: [0, -2, -1] as [number, number, number], color: '#45b7d1', speed: 0.008 },
+    { position: [3, 1, -3] as [number, number, number], color: '#96ceb4', speed: 0.012 },
+    { position: [-1, -1, 1] as [number, number, number], color: '#ffa726', speed: 0.009 }
   ], []);
 
+  return (
+    <>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[10, 10, 10]} intensity={1} />
+      <pointLight position={[-10, -10, -10]} intensity={0.5} />
+      
+      {shapes.map((shape, index) => (
+        <FloatingShape
+          key={index}
+          position={shape.position}
+          color={shape.color}
+          speed={shape.speed}
+        />
+      ))}
+    </>
+  );
+};
+
+const FloatingShapes: React.FC = () => {
   return (
     <div className="w-full h-full">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 75 }}
-        className="w-full h-full"
-        shadows
+        style={{ background: 'transparent' }}
       >
-        {/* Lighting setup */}
-        <ambientLight intensity={0.4} />
-        <directionalLight 
-          position={[10, 10, 5]} 
-          intensity={1} 
-          castShadow 
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-        />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#8b5cf6" />
-        
-        {/* Floating shapes */}
-        {shapes.map((shape, index) => (
-          <FloatingShape
-            key={index}
-            position={shape.position}
-            shape={shape.shape}
-            color={shape.color}
-          />
-        ))}
-
-        {/* Interactive controls */}
-        <OrbitControls 
-          enableZoom={false}
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={0.5}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 2}
-        />
+        <Scene />
       </Canvas>
     </div>
   );
