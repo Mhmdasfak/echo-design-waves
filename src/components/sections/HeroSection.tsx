@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import FloatingShapes from '@/components/3d/FloatingShapes';
@@ -117,16 +116,14 @@ export const HeroSection: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Enhanced 3D Scene */}
+          {/* Enhanced 3D Scene - Merged with background */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotateY: 20 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ delay: 0.8, duration: 1.2, ease: "easeOut" }}
             className="h-96 lg:h-[600px] relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl backdrop-blur-sm border border-white/20 shadow-2xl">
-              <FloatingShapes />
-            </div>
+            <FloatingShapes />
             
             {/* Interactive hint */}
             <motion.div
