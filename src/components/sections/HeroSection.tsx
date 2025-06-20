@@ -124,16 +124,6 @@ export const HeroSection: React.FC = () => {
             className="h-96 lg:h-[600px] relative"
           >
             <FloatingShapes />
-            
-            {/* Interactive hint */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.5 }}
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-full text-sm text-slate-600 dark:text-slate-300 shadow-lg"
-            >
-              Click & drag to interact!
-            </motion.div>
           </motion.div>
         </div>
       </div>
