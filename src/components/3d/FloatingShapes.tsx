@@ -21,38 +21,44 @@ const FloatingShape: React.FC<{ position: [number, number, number]; shape: 'sphe
     meshRef.current.position.y = position[1] + Math.sin(time * 0.8 + position[0]) * 0.3;
   });
 
-  const ShapeComponent = useMemo(() => {
-    const props = {
-      ref: meshRef,
-      position,
-      castShadow: true,
-      receiveShadow: true,
+  const renderShape = () => {
+    const materialProps = {
+      color,
+      metalness: 0.7,
+      roughness: 0.2,
+      transparent: true,
+      opacity: 0.8,
     };
 
     switch (shape) {
       case 'sphere':
-        return <Sphere {...props} args={[0.8, 32, 32]} />;
+        return (
+          <Sphere ref={meshRef} position={position} args={[0.8, 32, 32]} castShadow receiveShadow>
+            <meshStandardMaterial {...materialProps} />
+          </Sphere>
+        );
       case 'box':
-        return <Box {...props} args={[1.2, 1.2, 1.2]} />;
+        return (
+          <Box ref={meshRef} position={position} args={[1.2, 1.2, 1.2]} castShadow receiveShadow>
+            <meshStandardMaterial {...materialProps} />
+          </Box>
+        );
       case 'octahedron':
-        return <Octahedron {...props} args={[1]} />;
+        return (
+          <Octahedron ref={meshRef} position={position} args={[1]} castShadow receiveShadow>
+            <meshStandardMaterial {...materialProps} />
+          </Octahedron>
+        );
       default:
-        return <Sphere {...props} args={[0.8, 32, 32]} />;
+        return (
+          <Sphere ref={meshRef} position={position} args={[0.8, 32, 32]} castShadow receiveShadow>
+            <meshStandardMaterial {...materialProps} />
+          </Sphere>
+        );
     }
-  }, [shape, position]);
+  };
 
-  return (
-    <group>
-      {ShapeComponent}
-      <meshStandardMaterial 
-        color={color} 
-        metalness={0.7} 
-        roughness={0.2} 
-        transparent 
-        opacity={0.8}
-      />
-    </group>
-  );
+  return <>{renderShape()}</>;
 };
 
 // Main 3D scene component
