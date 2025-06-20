@@ -28,23 +28,17 @@ export const Navigation: React.FC = () => {
 
   const navVariants = {
     hidden: { y: -100, opacity: 0 },
-    visible: { 
-      y: 0, 
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+    visible: { y: 0, opacity: 1 }
   };
 
   const mobileMenuVariants = {
     closed: {
       opacity: 0,
-      height: 0,
-      transition: { duration: 0.3, ease: "easeInOut" }
+      height: 0
     },
     open: {
       opacity: 1,
-      height: "auto",
-      transition: { duration: 0.3, ease: "easeInOut" }
+      height: "auto"
     }
   };
 
@@ -53,6 +47,7 @@ export const Navigation: React.FC = () => {
       variants={navVariants}
       initial="hidden"
       animate="visible"
+      transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
           ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg' 
@@ -129,6 +124,7 @@ export const Navigation: React.FC = () => {
               initial="closed"
               animate="open"
               exit="closed"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="md:hidden overflow-hidden"
             >
               <div className="py-4 space-y-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-lg mt-2">
@@ -140,9 +136,9 @@ export const Navigation: React.FC = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ 
                         opacity: 1, 
-                        x: 0,
-                        transition: { delay: index * 0.1 }
+                        x: 0
                       }}
+                      transition={{ delay: index * 0.1 }}
                       exit={{ opacity: 0, x: -20 }}
                     >
                       <Link
