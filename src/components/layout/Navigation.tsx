@@ -31,7 +31,7 @@ export const Navigation: React.FC = () => {
     visible: { 
       y: 0, 
       opacity: 1,
-      transition: { duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] }
+      transition: { duration: 0.6, ease: "easeOut" }
     }
   };
 
@@ -39,12 +39,12 @@ export const Navigation: React.FC = () => {
     closed: {
       opacity: 0,
       height: 0,
-      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+      transition: { duration: 0.3, ease: "easeInOut" }
     },
     open: {
       opacity: 1,
       height: "auto",
-      transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+      transition: { duration: 0.3, ease: "easeInOut" }
     }
   };
 
