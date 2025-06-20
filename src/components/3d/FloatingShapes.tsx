@@ -20,17 +20,18 @@ const FloatingShape: React.FC<{ position: [number, number, number]; color: strin
   });
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <Sphere args={[1, 32, 32]}>
-        <MeshDistortMaterial
-          color={color}
-          attach="material"
-          distort={0.5}
-          speed={2}
-          roughness={0.4}
-        />
-      </Sphere>
-    </mesh>
+    <Sphere 
+      ref={meshRef} 
+      position={position} 
+      args={[1, 32, 32]}
+    >
+      <MeshDistortMaterial
+        color={color}
+        distort={0.5}
+        speed={2}
+        roughness={0.4}
+      />
+    </Sphere>
   );
 };
 
